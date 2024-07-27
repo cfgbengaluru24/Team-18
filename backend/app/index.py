@@ -3,8 +3,25 @@ from fastapi import FastAPI
 from routes.calender import router as calender
 from routes.auth_router import router as auth_router
 from pymongo import MongoClient
+from services.allocation import allocate
 
 app = FastAPI()
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+
+# Create the scheduler
+scheduler = BackgroundScheduler()
+
+# Define a job function to be scheduled
+def schedule_allocate():
+    allocate(app.database)
+
+# Add a daily job
+scheduler.add_job(schedule_allocate, CronTrigger(hour=0, minute=0))  # Runs every day at midnight
+
+# Start the scheduler
+scheduler.start()
 
 
 @app.on_event("startup")
