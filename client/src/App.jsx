@@ -6,6 +6,7 @@ import Navbar from './components/navbar';
 import Eachcamp from './pages/eachcamp';
 import CampDetail from './components/CampDetail';
 import Login from './pages/Login.jsx';
+import Dashboard from './pages/TrainerDashboard.jsx';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/camps" element={<Eachcamp />} />
         <Route path="/camps/:id" element={<CampDetail />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/trainer/:id" element={<Dashboard />} />
       </Routes>
     </Router>
   );
