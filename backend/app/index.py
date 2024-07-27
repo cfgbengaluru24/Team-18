@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI
 from routes.calender import router as calender
+from routes.auth_router import router as auth_router
 from pymongo import MongoClient
 
 app = FastAPI()
@@ -24,3 +25,4 @@ def shutdown_db_client():
     app.mongodb_client.close()
 
 app.include_router(calender, prefix="/calender")
+app.include_router(auth_router, prefix="/auth_router")
