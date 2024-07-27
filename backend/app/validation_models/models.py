@@ -10,7 +10,7 @@ class TrainerToCamp(BaseModel):
     camp_id: int
     trainer_id: int
 
-class SignupRequest(BaseModel):
+class Trainer(BaseModel):
     id: int
     username: str
     email: str
