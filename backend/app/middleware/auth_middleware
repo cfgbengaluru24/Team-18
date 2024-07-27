@@ -5,7 +5,7 @@ import jwt
 
 security = HTTPBearer()
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Security(security), request: Request):
+def verify_token(request: Request, credentials: HTTPAuthorizationCredentials = Security(security)):
     token = credentials.credentials
     try:
         payload = jwt.decode(token, 'your-secret-key', algorithms=['HS256'])
