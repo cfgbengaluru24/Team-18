@@ -5,7 +5,7 @@ import Calendar from './pages/calendar';
 import Navbar from './components/navbar';
 import Eachcamp from './pages/eachcamp';
 import CampDetail from './components/CampDetail';
-import Login from './pages/login';
+import Login from './pages/Login.jsx';
 
 export default function App() {
   return (
