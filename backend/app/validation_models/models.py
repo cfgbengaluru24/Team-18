@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 class Camp(BaseModel):
+    id : int
     location: str
     date: str
-    campsize : int
+    camp_size : int
 
 class TrainerToCamp(BaseModel):
     camp_id: int
