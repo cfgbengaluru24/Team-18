@@ -1,0 +1,7 @@
+from validation_models.models import Camp
+
+async def add_camp(camp : Camp):
+    pass
+
+async def add_trainer_to_camp():
+    pass
