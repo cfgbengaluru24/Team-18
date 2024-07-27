@@ -1,4 +1,3 @@
-from validation_models.models import Camp
 from fastapi import Request
 
 async def login(login: dict, requests: Request):

@@ -10,15 +10,16 @@ class TrainerToCamp(BaseModel):
     camp_id: int
     trainer_id: int
 
-class User(BaseModel):
+class SignupRequest(BaseModel):
     id: int
     username: str
     email: str
     passwd: str
-
-class UserInDB(User):
-    hashed_password: str
+    location: str
+    experience: int
+    gender: str
 
 class LoginRequest(BaseModel):
     email: str
     passwd: str
+
