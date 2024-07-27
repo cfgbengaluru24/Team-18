@@ -23,3 +23,6 @@ class LoginRequest(BaseModel):
     email: str
     passwd: str
 
+class Weekend(BaseModel):
+    date: str
+
