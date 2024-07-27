@@ -26,3 +26,6 @@ class LoginRequest(BaseModel):
 class Weekend(BaseModel):
     date: str
 
+class TrainerRoute(BaseModel):
+    trainer_id: int
+    camp_id: int

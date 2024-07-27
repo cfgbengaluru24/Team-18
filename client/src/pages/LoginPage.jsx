@@ -1,13 +1,46 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+    setError('');
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/auth/login', {
+        email,
+        passwd: password
+      });
+      console.log('Login successful:', response.data);
+
+      
+      // Save the token to localStorage
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        // Optionally, redirect the user or update the app state
+        console.log('Token saved to localStorage');
+      } else {
+        setError('No token received from server');
+      }
+      // console.log()
+      if(response.data.role == "admin"){
+        navigate("/")
+      }
+      else if(response.data.role == "trainer"){
+        navigate("/trainer/" + response.data.id);
+      }
+
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -81,6 +114,10 @@ const Login = () => {
               </a>
             </div>
           </div>
+
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
 
           <div>
             <button

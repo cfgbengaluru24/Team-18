@@ -6,9 +6,22 @@ from routes.trainer_router import router as trainer_router
 from routes.admin_router import router as admin_router
 from pymongo import MongoClient
 from services.allocation import allocate
-from middleware.auth_middleware import verify_token
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -43,9 +56,6 @@ def startup_db_client():
 @app.on_event("shutdown")
 def shutdown_db_client():
     app.mongodb_client.close()
-
-# admin_router.add_middlewares(verify_token)
-# trainer_router.add_middlewares(verify_token)
 
 app.include_router(calender, prefix="/calender")
 app.include_router(auth_router, prefix="/auth")

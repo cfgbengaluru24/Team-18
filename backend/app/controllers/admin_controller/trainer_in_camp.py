@@ -11,6 +11,7 @@ async def get_trainers(camp: Camp, requests: Request):
         # print(trainer)
     #     if trainer["status"] in ["registered", "allocated"]:
         trainer["_id"] = str(trainer["_id"])
+        trainer["status"] = trainerDetail["status"]
         trainers_list.append(trainer)
     # print(trainers_list)
         

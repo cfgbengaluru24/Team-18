@@ -12,12 +12,13 @@ export default function App() {
   return (
     <Router>
       <Navbar />
-      <Routes>
+      <Routes>  
         <Route path="/" element={<Calendar />} />
         <Route path="/camps" element={<Eachcamp />} />
         <Route path="/camps/:id" element={<CampDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/trainer/:id" element={<Dashboard />} />
+        <Route path="/date/:id" element={<Eachcamp />} />
       </Routes>
     </Router>
   );

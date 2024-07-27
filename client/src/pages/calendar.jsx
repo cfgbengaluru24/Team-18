@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const fetchCamps = async (date) => {
+  try {
+    const response = await axios.post('http://localhost:8000/admin/camp_on_weeknd', { date });
+    console.log(date);
+    return response.data.camps;
+  } catch (error) {
+    console.error('Error fetching camps:', error);
+    return [];
+  }
+};
+
+
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [camps, setCamps] = useState({});
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -14,6 +29,28 @@ const Calendar = () => {
     const day = new Date(year, month, 1).getDay();
     return day === 0 ? 6 : day - 1;
   };
+
+  useEffect(() => {
+    const fetchCampsForMonth = async () => {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const daysInMonth = getDaysInMonth(year, month);
+      const newCamps = {};
+  
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        if (date.getDay() === 6) { // Saturday
+          const weekendDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const campsList = await fetchCamps(weekendDate);
+          newCamps[weekendDate] = campsList;
+        }
+      }
+  
+      setCamps(newCamps);
+    };
+  
+    fetchCampsForMonth();
+  }, [currentDate]);
   
   const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
@@ -32,15 +69,21 @@ const Calendar = () => {
       
       if (dayOfWeek === 6) {
         const sundayDate = new Date(year, month, day + 1);
+        const weekendDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const weekendCamps = camps[weekendDate] || [];
+        
         days.push(
           <Link
             key={`weekend-${day}`}
-            to={`/date/${year}/${month + 1}/${day}-${sundayDate.getDate()}`}
-            className="h-24 col-span-2 border border-gray-200 rounded-lg flex items-center justify-center bg-green-100 hover:bg-green-200 transition-colors duration-200"
+            to={`/date/${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`}
+            className="h-24 col-span-2 border border-gray-200 rounded-lg flex flex-col items-center justify-center bg-green-100 hover:bg-green-200 transition-colors duration-200"
           >
             <span className="text-sm font-medium text-red-500">
-              {day}-{sundayDate.getDate()} Weekend
+              {String(day).padStart(2, '0')}-{String(sundayDate.getDate()).padStart(2, '0')} Weekend
             </span>
+            {weekendCamps.map((camp, index) => (
+              <span key={index} className="text-xs text-gray-600">{camp.name}</span>
+            ))}
           </Link>
         );
         day++;
