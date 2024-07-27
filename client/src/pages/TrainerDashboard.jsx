@@ -5,27 +5,28 @@ import axios from 'axios';
 const Dashboard = () => {
   const { id } = useParams();
   const [trainer, setTrainer] = useState(null);
+  const [camps, setCamps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchTrainerData() {
+    async function fetchData() {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/trainer/get_details", { id, "username" : "as", "email" : "asdf", "passwd" : "asdf", "location" : "sdf", "experience" : 32, "gender": "sdf"  });
-        setTrainer(response.data.details);
-        console.log(response.data);
+        const trainerResponse = await axios.post("http://127.0.0.1:8000/trainer/get_details", { id, "username" : "eofj", "email" : "ein", "passwd" : "gosd", "location" : "oj", "experience": 12, "gender" : "roij"});
+        setTrainer(trainerResponse.data.details);
+
+        const campsResponse = await axios.post("http://127.0.0.1:8000/trainer/camp_for_trainer", { id, "username" : "eofj", "email" : "ein", "passwd" : "gosd", "location" : "oj", "experience": 12, "gender" : "roij"});
+        setCamps(campsResponse.data.camps);
+
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching trainer data:", err);
-        setError("Failed to load trainer details");
+        console.error("Error fetching data:", err);
+        setError("Failed to load data");
         setLoading(false);
       }
     }
-
-    fetchTrainerData();
+    fetchData();
   }, [id]);
-
-  // ... (keep handleAccept and handleDecline as they are)
 
   if (loading) return <div className="text-gray-700">Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -60,8 +61,52 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Camps Allocated</h2>
-        <p className="text-gray-700">No camps allocated yet.</p>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Camps Registered</h2>
+        {camps.length === 0 ? (
+          <p className="text-gray-700">No camps allocated yet.</p>
+        ) : (
+          <div className="bg-white shadow-lg rounded-lg p-6 mb-6 overflow-hidden">
+            <div className="overflow-x-auto rounded-lg">
+              <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead className="bg-slate-500 text-white">
+                  <tr>
+                    <th className="py-4 px-6 text-left text-base font-semibold uppercase tracking-wider rounded-tl-lg">Camp ID</th>
+                    <th className="py-4 px-6 text-left text-base font-semibold uppercase tracking-wider">Location</th>
+                    <th className="py-4 px-6 text-left text-base font-semibold uppercase tracking-wider">Date</th>
+                    <th className="py-4 px-6 text-left text-base font-semibold uppercase tracking-wider">Camp Size</th>
+                    <th className="py-4 px-6 text-left text-base font-semibold uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {camps.map((camp, index) => (
+                    <tr key={camp._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-4 px-6 text-base text-gray-700">{camp.id}</td>
+                      <td className="py-4 px-6 text-base text-gray-700">{camp.location}</td>
+                      <td className="py-4 px-6 text-base text-gray-700">{camp.date}</td>
+                      <td className="py-4 px-6 text-base text-gray-700">{camp.camp_size}</td>
+                        <td className="py-4 px-6 text-base">
+                        {camp.status === 'Accepted' ? (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Accepted
+                          </span>
+                        ) : camp.status === 'Declined' ? (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Declined
+                          </span>
+                        ) : (
+                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-yellow-800">
+                            Registered
+                          </span>
+                        )}
+                      </td>
+
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

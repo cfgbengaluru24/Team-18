@@ -10,6 +10,7 @@ async def get_camp(trainer: Trainer, requests: Request):
             camp = requests.app.database['camp'].find_one({"id": allocDetail["camp_id"]})
             if camp:
                 camp["_id"] = str(camp["_id"])
+                camp["status"] = allocDetail["status"]
                 camps.append(camp)
-                
+
     return {"status": "success", "camps": camps}
