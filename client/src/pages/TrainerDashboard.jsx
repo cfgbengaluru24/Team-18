@@ -78,30 +78,29 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {camps.map((camp, index) => (
-                    <tr key={camp._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="py-4 px-6 text-base text-gray-700">{camp.id}</td>
-                      <td className="py-4 px-6 text-base text-gray-700">{camp.location}</td>
-                      <td className="py-4 px-6 text-base text-gray-700">{camp.date}</td>
-                      <td className="py-4 px-6 text-base text-gray-700">{camp.camp_size}</td>
-                        <td className="py-4 px-6 text-base">
-                        {camp.status === 'Accepted' ? (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Accepted
-                          </span>
-                        ) : camp.status === 'Declined' ? (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            Declined
-                          </span>
-                        ) : (
-                          <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-yellow-800">
-                            Registered
-                          </span>
-                        )}
-                      </td>
-
-                    </tr>
-                  ))}
+                {camps.map((camp, index) => (
+                  <tr key={camp._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                    <td className="py-4 px-6 text-base text-gray-700">{camp.id}</td>
+                    <td className="py-4 px-6 text-base text-gray-700">{camp.location}</td>
+                    <td className="py-4 px-6 text-base text-gray-700">{camp.date}</td>
+                    <td className="py-4 px-6 text-base text-gray-700">{camp.camp_size}</td>
+                    <td className="py-4 px-6 text-base">
+                      {camp.status === 'allocated' ? (
+                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-yellow-800">
+                          Allocated
+                        </span>
+                      ) : camp.status === 'registered' ? (
+                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-green-800">
+                          Registered
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                          {camp.status}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
                 </tbody>
               </table>
             </div>

@@ -31,7 +31,7 @@ const Login = () => {
       }
       // console.log()
       if(response.data.role == "admin"){
-        navigate("/")
+        navigate("/calendar")
       }
       else if(response.data.role == "trainer"){
         navigate("/trainer/" + response.data.id);
